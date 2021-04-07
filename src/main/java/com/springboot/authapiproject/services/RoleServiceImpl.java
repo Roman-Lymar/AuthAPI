@@ -22,4 +22,8 @@ public class RoleServiceImpl {
     public Optional<Role> findRoleById(Integer id){
         return roleRepository.findById(id);
     }
+
+    public Role findRoleByName(String role){
+        return roleRepository.findByRole(role);
+    }
 }

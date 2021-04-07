@@ -7,6 +7,7 @@ import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
@@ -18,12 +19,14 @@ public class JwtProvider {
     private String jwtSecret;
 
     public String generateToken(String id, String login, String role) {
-        Date date = Date.from(LocalDate.now().plusDays(15).atStartOfDay(ZoneId.systemDefault()).toInstant());
+
         return Jwts.builder()
-                .setId(id)
-                .setAudience(role)
-                .setExpiration(date)
-                .signWith(SignatureAlgorithm.HS512, jwtSecret)
+                .setHeaderParam("typ", "JWT")
+                .setSubject(id)
+                .claim("role", role)
+                .setIssuedAt(Date.from(Instant.ofEpochSecond(1466796822L)))
+                .setExpiration(Date.from(Instant.ofEpochSecond(4622470422L)))
+                .signWith(SignatureAlgorithm.HS256, jwtSecret)
                 .compact();
     }
 
@@ -40,7 +43,7 @@ public class JwtProvider {
 
     public String getIdFromToken(String token) {
         Claims claims = Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody();
-        return claims.getId();
+        return claims.getSubject();
     }
 
 }

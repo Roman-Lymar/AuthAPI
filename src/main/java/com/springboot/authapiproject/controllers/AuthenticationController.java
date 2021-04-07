@@ -16,7 +16,7 @@ import javax.validation.Valid;
 
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v1/users")
 public class AuthenticationController {
 
     private static final Logger logger = LogManager.getLogger(SecureController.class.getSimpleName());
