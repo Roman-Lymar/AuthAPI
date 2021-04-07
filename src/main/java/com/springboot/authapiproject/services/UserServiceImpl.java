@@ -58,7 +58,7 @@ public class UserServiceImpl {
 
     public User registerUser(User user) throws Exception {
         if(findUserByLogin(user.getLogin())==null){
-            Role role = roleService.findRoleById(2).get();
+            Role role = roleService.findRoleById(1).get();
             user.setRole(role);
             user.setPassword(passwordEncoder.encode(user.getPassword()));
             logger.info(user.getPassword());
@@ -95,7 +95,8 @@ public class UserServiceImpl {
         return null;
     }
 
-    public User changePassword(User user, String password, String newPassword) throws Exception {
+    public User changePassword(UUID id, String password, String newPassword) throws Exception {
+        User user = getUserById(id).get();
         if(passwordEncoder.matches(password, user.getPassword())) {
             user.setPassword(passwordEncoder.encode(newPassword));
             return saveUser(user);
@@ -103,6 +104,22 @@ public class UserServiceImpl {
         else{
             throw new Exception("passwords don't match");
         }
+    }
+
+    public User changeLogin(UUID id, String newLogin){
+        User user = getUserById(id).get();
+        user.setLogin(newLogin);
+        saveUser(user);
+        return user;
+    }
+
+    public User changeRole(UUID id, String newRole){
+        User user = getUserById(id).get();
+        Role role = roleService.findRoleByName(newRole);
+        logger.info(role.getName());
+        user.setRole(role);
+        saveUser(user);
+        return user;
     }
 
     @Autowired
