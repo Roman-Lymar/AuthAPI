@@ -34,7 +34,7 @@ public class AuthenticationController {
         u.setLogin(registrationRequest.getLogin());
         userService.registerUser(u);
         String token = jwtProvider.generateToken(u.getId().toString(), u.getLogin(), u.getRole().getName());
-        logger.info("control token " + token);
+        logger.info("control token {}", token);
         return new AuthResponse(token);
     }
 
