@@ -6,6 +6,9 @@ import javax.persistence.*;
 import java.util.Objects;
 import java.util.UUID;
 
+import static com.springboot.authapiproject.services.PasswordValidator.*;
+import static org.springframework.boot.context.properties.source.ConfigurationPropertyName.isValid;
+
 @Entity
 @Table(name = "users")
 public class User {
@@ -23,7 +26,7 @@ public class User {
     private String password;
 
     @ManyToOne()
-    @JoinColumn(name ="role_id")
+    @JoinColumn(name = "role_id")
     private Role role;
 
     public User() {
@@ -59,7 +62,13 @@ public class User {
     }
 
     public void setPassword(String password) {
-        this.password = password;
+        try {
+            isValid(password);
+            this.password = password;
+        } catch (Exception e) {
+
+        }
+
     }
 
     @Override

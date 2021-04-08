@@ -97,11 +97,15 @@ public class UserServiceImpl {
 
     public User changePassword(UUID id, String password, String newPassword) throws Exception {
         User user = getUserById(id).get();
-        if(passwordEncoder.matches(password, user.getPassword())) {
-            user.setPassword(passwordEncoder.encode(newPassword));
-            return saveUser(user);
-        }
-        else{
+
+        if (passwordEncoder.matches(password, user.getPassword())) {
+            if (passwordEncoder.matches(newPassword, user.getPassword())) {
+                throw new Exception("Passwords shouldn't match");
+            } else {
+                user.setPassword(passwordEncoder.encode(newPassword));
+                return saveUser(user);
+            }
+        } else {
             throw new Exception("passwords don't match");
         }
     }
