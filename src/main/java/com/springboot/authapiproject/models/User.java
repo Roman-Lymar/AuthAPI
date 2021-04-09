@@ -62,13 +62,8 @@ public class User {
     }
 
     public void setPassword(String password) {
-        try {
-            isValid(password);
-            this.password = password;
-        } catch (Exception e) {
 
-        }
-
+        this.password = password;
     }
 
     @Override

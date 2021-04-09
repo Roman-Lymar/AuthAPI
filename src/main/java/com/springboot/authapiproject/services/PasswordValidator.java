@@ -21,12 +21,12 @@ public class PasswordValidator {
 
     private  final Pattern pattern = Pattern.compile(PASSWORD_PATTERN);
 
-    public void isValid(final String password) throws Exception {
+    public boolean isValid(final String password){
         Matcher matcher = pattern.matcher(password);
-       // return matcher.matches();
-        if(!matcher.matches()) {
-            throw new Exception("The entered password does not meet the password ");
-        }
+       return matcher.matches();
+
+
+
 
         }
     }

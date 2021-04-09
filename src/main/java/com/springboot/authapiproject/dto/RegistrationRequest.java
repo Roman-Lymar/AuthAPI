@@ -1,7 +1,14 @@
 package com.springboot.authapiproject.dto;
 
 
+import com.springboot.authapiproject.exceptions.BadPassworExeption;
+import com.springboot.authapiproject.exceptions.ErrorMessages;
+import com.springboot.authapiproject.exceptions.ResourceNotFoundException;
+import org.springframework.validation.Errors;
+
 import javax.validation.constraints.NotEmpty;
+
+import static org.springframework.boot.context.properties.source.ConfigurationPropertyName.isValid;
 
 
 public class RegistrationRequest {
@@ -24,9 +31,15 @@ public class RegistrationRequest {
         return password;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setPassword(String password) throws Exception {
+        if(isValid(password)){
+
+            throw new BadPassworExeption(ErrorMessages.BAD_PASSWORD.getErrorMessage());
+        }  else
+            this.password = password;
     }
 
 
-}
+        }
+
+
