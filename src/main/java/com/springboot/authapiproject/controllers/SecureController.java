@@ -1,6 +1,5 @@
 package com.springboot.authapiproject.controllers;
 
-
 import com.springboot.authapiproject.dto.ChangeLoginRequest;
 import com.springboot.authapiproject.dto.ChangePasswordRequest;
 import com.springboot.authapiproject.dto.ChangeRoleRequest;
@@ -32,11 +31,10 @@ public class SecureController {
     public ResponseEntity<User> updatePassword(@RequestBody @Valid ChangePasswordRequest changePasswordRequest,
                                                @PathVariable(PATH_VARIABLE_ID) final UUID id,
                                                @RequestHeader("Authorization") String header) throws Exception {
-
+        logger.info("Request change-password");
         if(userServiceImpl.compareId(header, id)){
                 User user = userServiceImpl.changePassword(id, changePasswordRequest.getPassword(),
                         changePasswordRequest.getNewPassword());
-
             return ResponseEntity.ok(user);
         }
         else{
@@ -49,12 +47,9 @@ public class SecureController {
     public ResponseEntity<User> changeLogin(@RequestBody @Valid ChangeLoginRequest changeLoginRequest,
                                             @PathVariable(PATH_VARIABLE_ID) final UUID id,
                                             @RequestHeader("Authorization") String header) throws Exception {
-
+        logger.info("Request change-login");
         if(userServiceImpl.compareId(header, id)){
-
             User user = userServiceImpl.changeLogin(id, changeLoginRequest.getNewLogin());
-
-
             return ResponseEntity.ok(user);
         }
         else{
@@ -66,7 +61,7 @@ public class SecureController {
     @PatchMapping(path="{id}/change-role", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<User> changeRole(@RequestBody @Valid ChangeRoleRequest changeRoleRequest,
                                                @PathVariable(PATH_VARIABLE_ID) final UUID id){
-
+        logger.info("Request change-role");
         return ResponseEntity.ok(userServiceImpl.changeRole(id,changeRoleRequest.getNewRole()));
     }
 

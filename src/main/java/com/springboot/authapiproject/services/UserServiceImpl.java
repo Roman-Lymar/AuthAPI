@@ -7,8 +7,8 @@ import com.springboot.authapiproject.exceptions.ResourceNotFoundException;
 import com.springboot.authapiproject.models.Role;
 import com.springboot.authapiproject.models.User;
 import com.springboot.authapiproject.repositories.UserRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -21,9 +21,6 @@ import java.util.UUID;
 @Service
 public class UserServiceImpl {
 
-    Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
-
-
     @Autowired
     private UserRepository userRepository;
 
@@ -33,20 +30,24 @@ public class UserServiceImpl {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    private static final Logger logger = LogManager.getLogger(UserServiceImpl.class.getSimpleName());
+
     public List<User> findAll(){
+        logger.info("Method findAll called");
         return (List<User>) userRepository.findAll();
     }
 
     public Optional<User> getUserById(UUID id) {
+        logger.info("Method getUserById called");
         return Optional.ofNullable(userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(
                         ErrorMessages.NO_RESOURCE_FOUND.getErrorMessage() + id)));
     }
 
     public List<User> getUsersByName(String name) {
+        logger.info("Method getUsersByName called");
         Iterable<User> packageCustoms = userRepository.findAll();
         List<User> resultList = new ArrayList<>();
-
         for(User p: packageCustoms){
             if(p.getLogin().contains(name)){
                 resultList.add(p);
@@ -57,11 +58,11 @@ public class UserServiceImpl {
     }
 
     public User registerUser(User user) throws Exception {
+        logger.info("Method registerUser called");
         if(findUserByLogin(user.getLogin())==null){
             Role role = roleService.findRoleById(1).get();
             user.setRole(role);
             user.setPassword(passwordEncoder.encode(user.getPassword()));
-            logger.info(user.getPassword());
             return userRepository.save(user);
         }
         else{
@@ -71,10 +72,12 @@ public class UserServiceImpl {
     }
 
     public User saveUser(User user){
+        logger.info("Method saveUser called");
         return userRepository.save(user);
     }
 
     public void deleteUser(UUID id) {
+        logger.info("Method deleteUser called");
         if(getUserById(id).isPresent()) {
             userRepository.deleteById(id);
         }
@@ -82,10 +85,12 @@ public class UserServiceImpl {
     }
 
     public User findUserByLogin(String login){
+        logger.info("Method findUserByLogin called");
         return userRepository.findByLogin(login);
     }
 
     public User findByLoginAndPassword(String login, String password) {
+        logger.info("Method findByLoginAndPassword called");
         User userEntity = findUserByLogin(login);
         if (userEntity != null) {
             if (passwordEncoder.matches(password, userEntity.getPassword())) {
@@ -96,17 +101,22 @@ public class UserServiceImpl {
     }
 
     public User changePassword(UUID id, String password, String newPassword) throws Exception {
+        logger.info("Method changePassword called");
         User user = getUserById(id).get();
-        if(passwordEncoder.matches(password, user.getPassword())) {
-            user.setPassword(passwordEncoder.encode(newPassword));
-            return saveUser(user);
-        }
-        else{
+        if (passwordEncoder.matches(password, user.getPassword())) {
+            if (passwordEncoder.matches(newPassword, user.getPassword())) {
+                throw new Exception("Passwords shouldn't match");
+            } else {
+                user.setPassword(passwordEncoder.encode(newPassword));
+                return saveUser(user);
+            }
+        } else {
             throw new Exception("passwords don't match");
         }
     }
 
     public User changeLogin(UUID id, String newLogin){
+        logger.info("Method changeLogin called");
         User user = getUserById(id).get();
         user.setLogin(newLogin);
         saveUser(user);
@@ -114,6 +124,7 @@ public class UserServiceImpl {
     }
 
     public User changeRole(UUID id, String newRole){
+        logger.info("Method changeRole called");
         User user = getUserById(id).get();
         Role role = roleService.findRoleByName(newRole);
         logger.info(role.getName());
@@ -126,6 +137,7 @@ public class UserServiceImpl {
     private JwtProvider jwtProvider;
 
     public Boolean compareId(String header, UUID id){
+        logger.info("Method compareId called");
         String token = header.substring(7);
         return jwtProvider.getIdFromToken(token).equals(id.toString());
     }

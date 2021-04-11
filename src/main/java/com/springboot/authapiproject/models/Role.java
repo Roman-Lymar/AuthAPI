@@ -17,9 +17,6 @@ public class Role {
     @Column(name = "role")
     private String role;
 
-//    @OneToMany(mappedBy = "role")
-//    private List<User> users;
-
     public void setId(Integer id) {
         this.id = id;
     }

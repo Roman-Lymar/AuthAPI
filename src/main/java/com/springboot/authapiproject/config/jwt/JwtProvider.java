@@ -1,9 +1,11 @@
 package com.springboot.authapiproject.config.jwt;
 
 
+import com.springboot.authapiproject.controllers.AuthenticationController;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -15,7 +17,7 @@ import java.util.Date;
 @Component
 public class JwtProvider {
 
-    @Value("$(jwt.secret)")
+       @Value("$(jwt.secret)")
     private String jwtSecret;
 
     public String generateToken(String id, String login, String role) {
@@ -35,7 +37,7 @@ public class JwtProvider {
             Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token);
             return true;
         } catch (Exception e) {
-//            log.severe("invalid token");
+
         }
         return false;
     }

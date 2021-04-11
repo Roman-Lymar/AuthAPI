@@ -19,7 +19,7 @@ import javax.validation.Valid;
 @RequestMapping("/api/v1/users")
 public class AuthenticationController {
 
-    private static final Logger logger = LogManager.getLogger(SecureController.class.getSimpleName());
+    private static final Logger logger = LogManager.getLogger(AuthenticationController.class.getSimpleName());
 
     @Autowired
     private UserServiceImpl userService;
@@ -29,17 +29,19 @@ public class AuthenticationController {
 
     @PostMapping("/signup")
     public AuthResponse registerUser(@RequestBody @Valid RegistrationRequest registrationRequest) throws Exception {
+        logger.info("Request signup");
         User u = new User();
         u.setPassword(registrationRequest.getPassword());
         u.setLogin(registrationRequest.getLogin());
         userService.registerUser(u);
         String token = jwtProvider.generateToken(u.getId().toString(), u.getLogin(), u.getRole().getName());
-        logger.info("control token " + token);
+        logger.info("Control token created" );
         return new AuthResponse(token);
     }
 
     @PostMapping("/signin")
     public AuthResponse auth(@RequestBody AuthRequest request) {
+        logger.info("Request signin");
         User userEntity = userService.findByLoginAndPassword(request.getLogin(), request.getPassword());
         String token = jwtProvider.generateToken(userEntity.getId().toString(), userEntity.getLogin(), userEntity.getRole().getName());
         return new AuthResponse(token);
