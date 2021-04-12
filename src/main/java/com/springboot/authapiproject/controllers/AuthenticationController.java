@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.io.UnsupportedEncodingException;
 
 
 @RestController
@@ -34,16 +35,16 @@ public class AuthenticationController {
         u.setPassword(registrationRequest.getPassword());
         u.setLogin(registrationRequest.getLogin());
         userService.registerUser(u);
-        String token = jwtProvider.generateToken(u.getId().toString(), u.getLogin(), u.getRole().getName());
+        String token = jwtProvider.generateToken(u.getId().toString(), u.getRole().getName());
         logger.info("Control token created" );
         return new AuthResponse(token);
     }
 
     @PostMapping("/signin")
-    public AuthResponse auth(@RequestBody AuthRequest request) {
+    public AuthResponse auth(@RequestBody AuthRequest request) throws UnsupportedEncodingException {
         logger.info("Request signin");
         User userEntity = userService.findByLoginAndPassword(request.getLogin(), request.getPassword());
-        String token = jwtProvider.generateToken(userEntity.getId().toString(), userEntity.getLogin(), userEntity.getRole().getName());
+        String token = jwtProvider.generateToken(userEntity.getId().toString(), userEntity.getRole().getName());
         return new AuthResponse(token);
     }
 }
