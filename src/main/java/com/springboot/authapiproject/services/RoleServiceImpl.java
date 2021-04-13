@@ -17,7 +17,7 @@ public class RoleServiceImpl {
     @Autowired
     private RoleRepository roleRepository;
 
-    private static final Logger logger = LogManager.getLogger(RoleRepository.class.getSimpleName());
+    private static final Logger logger = LogManager.getLogger(RoleServiceImpl.class.getSimpleName());
 
 
     public List<Role> findAll(){

@@ -36,7 +36,7 @@ public class SecureController {
         if(userServiceImpl.compareId(header, id)){
                 User user = userServiceImpl.changePassword(id, changePasswordRequest.getPassword(),
                         changePasswordRequest.getNewPassword());
-            return ResponseEntity.status(HttpStatus.OK).body("User password changed successfully");
+            return ResponseEntity.status(HttpStatus.OK).body("Password changed successfully");
         }
         else{
             throw new Exception("Don't have access");
@@ -52,7 +52,7 @@ public class SecureController {
         if(userServiceImpl.compareId(header, id)){
             User user = userServiceImpl.changeLogin(id, changeLoginRequest.getNewLogin());
 
-            return ResponseEntity.status(HttpStatus.OK).body("User login changed successfully");
+            return ResponseEntity.status(HttpStatus.OK).body("Login changed successfully");
         }
         else{
             throw new Exception("Don't have access");

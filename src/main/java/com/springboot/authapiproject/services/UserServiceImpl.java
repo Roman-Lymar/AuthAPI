@@ -109,7 +109,7 @@ public class UserServiceImpl {
                 return saveUser(user);
             }
         } else {
-            throw new Exception("passwords don't match");
+            throw new Exception("Passwords don't match");
         }
     }
 
