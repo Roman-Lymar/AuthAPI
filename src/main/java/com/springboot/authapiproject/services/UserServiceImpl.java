@@ -2,14 +2,16 @@ package com.springboot.authapiproject.services;
 
 
 import com.springboot.authapiproject.config.jwt.JwtProvider;
-import com.springboot.authapiproject.exceptions.ErrorMessages;
-import com.springboot.authapiproject.exceptions.ResourceNotFoundException;
+import com.springboot.authapiproject.exceptions.*;
 import com.springboot.authapiproject.models.Role;
 import com.springboot.authapiproject.models.User;
 import com.springboot.authapiproject.repositories.UserRepository;
+import com.sun.xml.internal.ws.handler.HandlerException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -41,7 +43,7 @@ public class UserServiceImpl {
         logger.info("Method getUserById called");
         return Optional.ofNullable(userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(
-                        ErrorMessages.NO_RESOURCE_FOUND.getErrorMessage() + id)));
+                        ErrorMessages.NOT_FOUND_USER.getErrorMessage() + id)));
     }
 
     public List<User> getUsersByName(String name) {
@@ -53,7 +55,6 @@ public class UserServiceImpl {
                 resultList.add(p);
             }
         }
-
         return resultList;
     }
 
@@ -66,9 +67,8 @@ public class UserServiceImpl {
             return userRepository.save(user);
         }
         else{
-            throw new Exception("User with this login already exist");
+            throw new ConflictException(ErrorMessages.USER_EXISTS.getErrorMessage());
         }
-
     }
 
     public User saveUser(User user){
@@ -93,11 +93,12 @@ public class UserServiceImpl {
         logger.info("Method findByLoginAndPassword called");
         User userEntity = findUserByLogin(login);
         if (userEntity != null) {
-            if (passwordEncoder.matches(password, userEntity.getPassword())) {
+           if (passwordEncoder.matches(password, userEntity.getPassword())) {
                 return userEntity;
-            }
+            }else throw new ResourceNotFoundException(ErrorMessages.INCORRECT.getErrorMessage());
         }
-        return null;
+        else throw new ResourceNotFoundException(ErrorMessages.NOT_FOUND_USER.getErrorMessage());
+
     }
 
     public User changePassword(UUID id, String password, String newPassword) throws Exception {
@@ -115,23 +116,31 @@ public class UserServiceImpl {
         }
     }
 
-    public User changeLogin(UUID id, String newLogin){
+    public User changeLogin(UUID id, String newLogin) throws Exception {
         logger.info("Method changeLogin called");
-        User user = getUserById(id).get();
-        user.setLogin(newLogin);
-        saveUser(user);
-        return user;
+        if(newLogin.length()<2){
+           throw new EmptyFieldException(ErrorMessages.EMPTY_FIELD.getErrorMessage());
+        }else {
+            User user = getUserById(id).get();
+            user.setLogin(newLogin);
+            saveUser(user);
+            return user;
+        }
     }
 
     public User changeRole(UUID id, String newRole){
         logger.info("Method changeRole called");
         User user = getUserById(id).get();
         Role role = roleService.findRoleByName(newRole);
-        logger.info(role.getName());
-        user.setRole(role);
-        saveUser(user);
-        return user;
+        if(newRole.equals("client") || newRole.equals("admin")){
+            logger.info(role.getName());
+            user.setRole(role);
+            saveUser(user);
+            return user;
+           }else throw new InvalidRole(ErrorMessages.INVALID_ROLE.getErrorMessage());
     }
+
+
 
     @Autowired
     private JwtProvider jwtProvider;
