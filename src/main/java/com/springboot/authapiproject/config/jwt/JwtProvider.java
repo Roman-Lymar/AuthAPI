@@ -1,5 +1,6 @@
 package com.springboot.authapiproject.config.jwt;
 
+import com.springboot.authapiproject.exceptions.InvalidTokenException;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -37,7 +38,7 @@ public class JwtProvider {
         try {
             Jwts.parserBuilder().setSigningKey(getEncodedSecretKey()).build().parseClaimsJws(token);
             return true;
-        } catch (Exception e) {
+        } catch (Exception  e) {
 
         }
         return false;

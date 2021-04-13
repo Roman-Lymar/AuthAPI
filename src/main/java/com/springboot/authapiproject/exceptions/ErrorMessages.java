@@ -4,7 +4,12 @@ public enum ErrorMessages {
 
     NO_RESOURCE_FOUND("Resource with provided id is not found: id="),
     NO_RESOURCE_FOUND_BY_NAME("No results returned by the Query. No matches with: "),
-    IVALID_TOKEN(" Token is missing or invalid");
+    INVALID_TOKEN(" Token is missing or invalid"),
+    INVALID_ROLE("Non-existent Role"),
+    NOT_FOUND_USER("User not found"),
+    USER_EXISTS("User already exists"),
+    INCORRECT("Username or password is incorrect"),
+    EMPTY_FIELD("Field shouldn't be empty");
 
 
     private String errorMessage;
