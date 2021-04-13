@@ -2,7 +2,6 @@ package com.springboot.authapiproject.services;
 
 import com.springboot.authapiproject.dto.CustomUserDetails;
 import com.springboot.authapiproject.models.User;
-import com.springboot.authapiproject.repositories.RoleRepository;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
