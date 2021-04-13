@@ -8,6 +8,7 @@ import com.springboot.authapiproject.services.UserServiceImpl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -28,41 +29,43 @@ public class SecureController {
 
 
     @PatchMapping(path="{id}/change-password", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<User> updatePassword(@RequestBody @Valid ChangePasswordRequest changePasswordRequest,
-                                               @PathVariable(PATH_VARIABLE_ID) final UUID id,
-                                               @RequestHeader("Authorization") String header) throws Exception {
+    public ResponseEntity<?> updatePassword(@RequestBody @Valid ChangePasswordRequest changePasswordRequest,
+                                            @PathVariable(PATH_VARIABLE_ID) final UUID id,
+                                            @RequestHeader("Authorization") String header) throws Exception {
         logger.info("Request change-password");
         if(userServiceImpl.compareId(header, id)){
                 User user = userServiceImpl.changePassword(id, changePasswordRequest.getPassword(),
                         changePasswordRequest.getNewPassword());
-            return ResponseEntity.ok(user);
+            return ResponseEntity.status(HttpStatus.OK).body("Password changed successfully");
         }
         else{
-            throw new Exception("dont have access");
+            throw new Exception("Don't have access");
         }
 
     }
 
     @PatchMapping(path="{id}/change-login", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<User> changeLogin(@RequestBody @Valid ChangeLoginRequest changeLoginRequest,
+    public ResponseEntity<?> changeLogin(@RequestBody @Valid ChangeLoginRequest changeLoginRequest,
                                             @PathVariable(PATH_VARIABLE_ID) final UUID id,
                                             @RequestHeader("Authorization") String header) throws Exception {
         logger.info("Request change-login");
         if(userServiceImpl.compareId(header, id)){
             User user = userServiceImpl.changeLogin(id, changeLoginRequest.getNewLogin());
-            return ResponseEntity.ok(user);
+
+            return ResponseEntity.status(HttpStatus.OK).body("Login changed successfully");
         }
         else{
-            throw new Exception("dont have access");
+            throw new Exception("Don't have access");
         }
 
     }
 
     @PatchMapping(path="{id}/change-role", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<User> changeRole(@RequestBody @Valid ChangeRoleRequest changeRoleRequest,
+    public ResponseEntity<?> changeRole(@RequestBody @Valid ChangeRoleRequest changeRoleRequest,
                                                @PathVariable(PATH_VARIABLE_ID) final UUID id){
         logger.info("Request change-role");
-        return ResponseEntity.ok(userServiceImpl.changeRole(id,changeRoleRequest.getNewRole()));
+        User user = userServiceImpl.changeRole(id,changeRoleRequest.getNewRole());
+        return ResponseEntity.status(HttpStatus.OK).body("Role changed successfully");
     }
 
 }

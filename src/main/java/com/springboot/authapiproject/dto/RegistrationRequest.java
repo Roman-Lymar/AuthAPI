@@ -1,17 +1,10 @@
 package com.springboot.authapiproject.dto;
 
-
-
-import com.springboot.authapiproject.exceptions.ErrorMessages;
-import com.springboot.authapiproject.exceptions.ResourceNotFoundException;
-import com.springboot.authapiproject.services.UserServiceImpl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.validation.Errors;
 
 import javax.validation.constraints.NotEmpty;
 
-import static org.springframework.boot.context.properties.source.ConfigurationPropertyName.isValid;
 
 
 public class RegistrationRequest {

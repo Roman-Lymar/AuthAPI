@@ -39,7 +39,20 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
                 details);
         return ResponceEntityBuilder.build(apiExceptionModel);
     }
+    @ExceptionHandler(ConflictException.class)
+    protected ResponseEntity<Object> handleConflictExceptionException(ConflictException e) {
+        logger.error("Conflict " + e);
 
+        List<String> details = new ArrayList<>();
+        details.add(e.getMessage());
+
+        ApiExceptionModel apiExceptionModel = new ApiExceptionModel(
+                LocalDateTime.now(),
+                HttpStatus.CONFLICT,
+                "Conflict",
+                details);
+        return ResponceEntityBuilder.build(apiExceptionModel);
+    }
 
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException e,
@@ -73,6 +86,33 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
                 LocalDateTime.now(),
                 HttpStatus.BAD_REQUEST,
                 "Type Mismatch",
+                details);
+        return ResponceEntityBuilder.build(apiExceptionModel);
+    }
+    @ExceptionHandler(InvalidRole.class)
+    protected ResponseEntity<Object> handleEmptyFieldException(InvalidRole e) {
+        logger.error("Invalid Role " + e);
+        List<String> details = new ArrayList<>();
+        details.add(e.getMessage());
+
+        ApiExceptionModel apiExceptionModel = new ApiExceptionModel(
+                LocalDateTime.now(),
+                HttpStatus.BAD_REQUEST,
+                "Invalid Role",
+                details);
+        return ResponceEntityBuilder.build(apiExceptionModel);
+    }
+
+    @ExceptionHandler(EmptyFieldException.class)
+    protected ResponseEntity<Object> handleEmptyFieldException(EmptyFieldException e) {
+        logger.error("Empty field " + e);
+        List<String> details = new ArrayList<>();
+        details.add(e.getMessage());
+
+        ApiExceptionModel apiExceptionModel = new ApiExceptionModel(
+                LocalDateTime.now(),
+                HttpStatus.BAD_REQUEST,
+                "Empty field",
                 details);
         return ResponceEntityBuilder.build(apiExceptionModel);
     }
@@ -113,7 +153,36 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
         return ResponceEntityBuilder.build(apiExceptionModel);
     }
 
-    @ExceptionHandler({Exception.class})
+    @ExceptionHandler(InvalidTokenException.class)
+    protected ResponseEntity<Object> handleInvalidTokenException(InvalidTokenException e) {
+        logger.error(e);
+
+        List<String> details = new ArrayList<>();
+        details.add(e.getMessage());
+
+        ApiExceptionModel apiExceptionModel = new ApiExceptionModel(
+                LocalDateTime.now(),
+                HttpStatus.UNAUTHORIZED,
+                "Invalid token!",
+                details);
+        return ResponceEntityBuilder.build(apiExceptionModel);
+    }
+    @ExceptionHandler(AccessDeniedException.class)
+    protected ResponseEntity<Object> handleAccessDeniedException(AccessDeniedException e) {
+        logger.error(e);
+
+        List<String> details = new ArrayList<>();
+        details.add(e.getMessage());
+
+        ApiExceptionModel apiExceptionModel = new ApiExceptionModel(
+                LocalDateTime.now(),
+                HttpStatus.FORBIDDEN,
+                "Access denied!",
+                details);
+        return ResponceEntityBuilder.build(apiExceptionModel);
+    }
+
+        @ExceptionHandler({Exception.class})
     protected ResponseEntity<Object> handleAllExceptions(Exception e, WebRequest request) {
         logger.error("Error occurred " + e);
 

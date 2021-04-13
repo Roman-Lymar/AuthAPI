@@ -2,11 +2,10 @@ package com.springboot.authapiproject.dto;
 
 
 
-import com.springboot.authapiproject.exceptions.ErrorMessages;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import static org.springframework.boot.context.properties.source.ConfigurationPropertyName.isValid;
 
 public class ChangePasswordRequest {
 

@@ -2,7 +2,6 @@ package com.springboot.authapiproject.services;
 
 import com.springboot.authapiproject.dto.CustomUserDetails;
 import com.springboot.authapiproject.models.User;
-import com.springboot.authapiproject.repositories.RoleRepository;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +18,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Autowired
     private UserServiceImpl userService;
 
-    private static final Logger logger = LogManager.getLogger(UserServiceImpl.class.getSimpleName());
+    private static final Logger logger = LogManager.getLogger(CustomUserDetailsService.class.getSimpleName());
 
 
     @Override
