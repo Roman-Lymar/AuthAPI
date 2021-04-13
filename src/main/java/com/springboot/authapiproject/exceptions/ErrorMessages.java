@@ -6,9 +6,9 @@ public enum ErrorMessages {
     NO_RESOURCE_FOUND_BY_NAME("No results returned by the Query. No matches with: "),
     INVALID_TOKEN(" Token is missing or invalid"),
     INVALID_ROLE("Non-existent Role"),
-    NOT_FOUND_USER("User not found"),
-    USER_EXISTS("User already exists"),
-    INCORRECT("Username or password is incorrect"),
+    NOT_FOUND_USER("Client not found"),
+    USER_EXISTS("Client already exists"),
+    INCORRECT("Client name or password is incorrect"),
     EMPTY_FIELD("Field shouldn't be empty");
 
 
