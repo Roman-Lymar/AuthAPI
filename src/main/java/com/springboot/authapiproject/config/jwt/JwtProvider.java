@@ -1,11 +1,10 @@
 package com.springboot.authapiproject.config.jwt;
 
-import com.springboot.authapiproject.exceptions.InvalidTokenException;
+
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 
-import io.jsonwebtoken.io.Encoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;

@@ -6,12 +6,9 @@ import com.springboot.authapiproject.exceptions.*;
 import com.springboot.authapiproject.models.Role;
 import com.springboot.authapiproject.models.User;
 import com.springboot.authapiproject.repositories.UserRepository;
-import com.sun.xml.internal.ws.handler.HandlerException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
