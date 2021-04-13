@@ -18,7 +18,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Autowired
     private UserServiceImpl userService;
 
-    private static final Logger logger = LogManager.getLogger(UserServiceImpl.class.getSimpleName());
+    private static final Logger logger = LogManager.getLogger(CustomUserDetailsService.class.getSimpleName());
 
 
     @Override
