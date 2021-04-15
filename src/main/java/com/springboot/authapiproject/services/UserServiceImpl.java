@@ -58,7 +58,7 @@ public class UserServiceImpl {
     public User registerUser(User user) throws Exception {
         logger.info("Method registerUser called");
         if(findUserByLogin(user.getLogin())==null){
-            Role role = roleService.findRoleById(1).get();
+            Role role = roleService.findRoleById(2).get();
             user.setRole(role);
             user.setPassword(passwordEncoder.encode(user.getPassword()));
             return userRepository.save(user);
